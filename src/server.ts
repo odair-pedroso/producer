@@ -5,7 +5,7 @@ import * as bodyParser from 'body-parser';
 import { createBullBoard } from '@bull-board/api';
 import { BullAdapter } from '@bull-board/api/bullAdapter';
 import { ExpressAdapter } from '@bull-board/express';
-import queues from './api';
+import queues from './queues';
 import api from './api';
 
 import * as expressListRoutes from 'express-list-routes';
@@ -21,8 +21,7 @@ app.use(bodyParser.json({ limit: '10mb' }));
 app.use(api);
 
 const serverAdapter = new ExpressAdapter();
-const adapterQueues = Object.values(queues)
-  .map(q => new BullAdapter(q));
+const adapterQueues = Object.values(queues).map(q => new BullAdapter(q));
 createBullBoard({ serverAdapter, queues: adapterQueues });
 serverAdapter.setBasePath('/admin/queues');
 app.use('/admin/queues', serverAdapter.getRouter());
@@ -31,5 +30,6 @@ app.use('/admin/queues', serverAdapter.getRouter());
 const port = process.env.PORT || 9000;
 app.listen(port, () => {
   console.log(`Aplicação - Ativa :D | ${port}`);
+  console.log(`Admin: http://localhost:${port}/admin/queues`)
   expressListRoutes(app, { prefix: '' });
 });
