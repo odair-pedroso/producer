@@ -33,6 +33,6 @@ const postCandidate = async (req, res) => {
 router.get('/', getPing);
 router.post('/log', postLog);
 router.post('/email', postEmail);
-router.post('/candidate', postCandidate);
+router.post('/candidates', postCandidate);
 
 export default router;
